@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<litepal>
+    <!--<dbname>用于设定数据库的名字  -->
+    <dbname value="demo" ></dbname>
+    <!--<version>用于设定数据库的版本  -->
+    <version value="4" ></version>
+
+    <!-- <list>用于设定所有的映射模型 -->
+    <list>
+        <mapping class="com.jack.litepaltest.News"></mapping>
+        <mapping class="com.jack.litepaltest.Comment"></mapping>
+        <mapping class="com.jack.litepaltest.Introduction"></mapping>
+        <mapping class="com.jack.litepaltest.Category"></mapping>
+    </list>
+</litepal>
+

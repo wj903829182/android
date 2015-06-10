@@ -1,0 +1,95 @@
+使用LitePalb的步骤
+  1.导入litepal的jar包到libs目录下
+  2.在assets目录下新建litepal.xml文件，进行文件的配置
+  3.在AndroidManifest.xml中配置LitePalApplication
+  4.新建类，然后再litepal.xml文件中进行配置
+  adb shell进入到shell操作模式
+  cd 目录:打开目录
+  sqlite3 数据库名：打开数据库
+  .table：查看数据库下面的所有表
+  .schema :查看所有建表语句
+  .schema tablename:查看单个建表语句
+  .exit or .quit 命令退出数据库的编辑，再键入exit命令就可以退出控制台了
+   select * from sqlite_master where name='news';查看表名为news的表的结构
+   .mode line命令切换显示模式
+   pragma命令来查看表结构 ：pragma table_info<comment>;
+   
+   使用LitePal的聚合函数
+   count()
+   count()方法主要是用于统计行数的，来统计news表中一共有多少行，
+   那么下面我们来看一下如何通过LitePal来实现同样的功能，代码如下所示：
+   int result = DataSupport.count(News.class);
+   调用DataSupport类当中的count()方法，count()方法接收一个Class参数，用于指定去统计哪张表当中的数据，
+   然后返回值是一个整型数据，也就是统计出的结果了。
+   除此之外，LitePal中所有的聚合函数都是支持连缀的，也就是说我们可以在统计的时候加入条件语句。
+   比如说想要统计一共有多少条新闻是零评论的，就可以这样写：
+   int result = DataSupport.where("commentcount = ?", "0").count(News.class);  
+   这个用法和我们在上一篇文章当中学到的连缀查询是比较像的，在DataSupport类中首先指定一个where语句用于条件约束，
+   然后连缀一个count()方法，这样统计出的就是满足条件语句的结果了。连缀不仅适用于count()方法，
+   也同样适用于下面我们将要介绍的所有方法，但由于用法都是相同的，后面就不再重复介绍了。
+   
+   
+   sum()
+   sum()方法主要是用于对结果进行求合的，比如说我们想要统计news表中评论的总数量，就可以这样写：
+   int result = DataSupport.sum(News.class, "commentcount", int.class);  
+   sum()方法的参数要稍微多一点，我们来一一看下。第一个参数很简单，还是传入的Class，用于指定去统计哪张表当中的数据。
+   第二个参数是列名，表示我们希望对哪一个列中的数据进行求合。第三个参数用于指定结果的类型，这里我们指定成int型，
+   因此返回结果也是int型。
+   需要注意的是，sum()方法只能对具有运算能力的列进行求合，比如说整型列或者浮点型列，
+   如果你传入一个字符串类型的列去求合，肯定是得不到任何结果的，这时只会返回一个0作为结果。
+   
+   
+   average()
+   average()方法主要是用于统计平均数的，比如说我们想要统计news表中平均每条新闻有多少评论，就可以这样写：
+   double result = DataSupport.average(News.class, "commentcount"); 
+   其中average()方法接收两个参数，第一个参数不用说，仍然是Class。第二个参数用于指定列名的，
+   表示我们想要统计哪一列的平均数。需要注意的是，这里返回值的类型是double型，因为平均数基本上都是会带有小数的，
+   用double类型可以最大程序保留小数位的精度。
+   同样地，average()方法也只能对具有运算能力的列进行求平均值，如果你传入了一个字符串类型的列，
+   也是无法得到任何结果的，这时同样只会返回一个0作为结果。
+   
+   max()
+   max()方法主要用于求出某个列中最大的数值，比如我们想要知道news表中所有新闻里面最高的评论数是多少，就可以这样写：
+   int result = DataSupport.max(News.class, "commentcount", int.class);  
+   可以看到，max()方法接收三个参数，第一个参数同样还是Class，用于指定去统计哪张表当中的数据。第二个参数是列名，
+   表示我们希望统计哪个列中的最大值。第三个参数用于指定结果的类型，根据实际情况来选择传入哪种类型就行了。
+   max()方法也只能对具有运算能力的列进行求最大值的，希望你在使用的时候能够谨记这一点。
+   
+   
+   min()
+   min()方法主要用于求出某个列中最小的数值，比如我们想要知道news表中所有新闻里面最少的评论数是多少，就可以这样写：
+   int result = DataSupport.min(News.class, "commentcount", int.class); 
+   min()方法和max()方法的用法基本上是一模一样的，参数也是完全相同，只是方法名变了一下。
+   它们一个是求出某一列中的最大值，一个是求出某一列中的最小值，仅此而已。
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
+   
